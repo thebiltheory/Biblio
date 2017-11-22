@@ -29,8 +29,6 @@ export default class SearchBooks extends Component {
 
   render() {
 
-    const isSearching = this.state
-
     return (
       <div className="search-books">
         <div className="search-books-bar">
