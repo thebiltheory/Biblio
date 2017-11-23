@@ -3,25 +3,16 @@ import { Link } from 'react-router-dom';
 import Book from '../atoms/Book';
 
 export default class SearchBooks extends Component {
-  constructor(props) {
-    super(props);
-    console.log(this);
-    console.log(props);
-    console.log(this.props.books);
-    this.state = {
-      books: this.props.books,
-      search: '',
-      results: [],
-    }
-    console.log(this.state.books);
+
+  state = {
+    books: [],
+    search: '',
+    results: [],
   }
 
-
-  // componentDidMount() {
-  //   console.log('Boooom, Big Reveal');
-  //   console.log(this.props.books);
-  //   this.setState({ books: this.props.books });
-  // }
+  componentWillReceiveProps(props) {
+    this.setState({ books: props.books });
+  }
 
   searchTerm = (e) => {
     e.preventDefault();
@@ -34,12 +25,12 @@ export default class SearchBooks extends Component {
     this.props.onSearch(e.target.value, 20)
       .then((books) => {
 
-        const allBooks = [...books, this.state.books];
-        // console.log(books);
-        console.log(this.state);
-        // console.log(allBooks);
+        const allBooks = [...books, ...this.state.books].reduce((prev, current) => {
+          console.log(prev, current);
+          return prev.shelf ? prev : current;
+        },);
 
-        this.setState({results: books})
+        this.setState({results: allBooks})
 
       })
   }
