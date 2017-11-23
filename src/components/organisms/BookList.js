@@ -23,6 +23,10 @@ export default class BookList extends Component {
   }
 
   render() {
+      const { books } = this.props;
+      const currentlyReading = books.filter((book) => book.shelf === 'currentlyReading');
+      const wantToRead = books.filter((book) => book.shelf === 'wantToRead');
+      const read = books.filter((book) => book.shelf === 'read');
     return(
       <div className="list-books">
         <div className="list-books-title">
@@ -32,18 +36,18 @@ export default class BookList extends Component {
           <div>
             <BookShelf
               shelf="Currently Reading"
-              books={this.currentlyReading()}
+              books={currentlyReading}
               onUpdateShelf={this.props.onUpdateShelf} />
 
             <BookShelf
               shelf="Want to Read"
-              books={this.wantToRead()}
+              books={wantToRead}
               onUpdateShelf={this.props.onUpdateShelf} />
 
             <BookShelf
               shelf="Read"
-              books={this.read()}
-              onUpdateShelf={this.props.onUpdateShelf} />  
+              books={read}
+              onUpdateShelf={this.props.onUpdateShelf} />
           </div>
         </div>
         <AddFab />

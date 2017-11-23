@@ -3,32 +3,48 @@ import { Link } from 'react-router-dom';
 import Book from '../atoms/Book';
 
 export default class SearchBooks extends Component {
-
-  state = {
-    books: [],
-    search: '',
-    results: [],
-  }
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    console.log(this);
+    console.log(props);
     console.log(this.props.books);
-    this.setState({books: this.props.books});
+    this.state = {
+      books: this.props.books,
+      search: '',
+      results: [],
+    }
+    console.log(this.state.books);
   }
+
+
+  // componentDidMount() {
+  //   console.log('Boooom, Big Reveal');
+  //   console.log(this.props.books);
+  //   this.setState({ books: this.props.books });
+  // }
 
   searchTerm = (e) => {
     e.preventDefault();
-    console.log(e.target.value);
+
+    console.log(this.state);
+    console.log(this.state.results);
 
     this.setState({ search: e.target.value });
 
     this.props.onSearch(e.target.value, 20)
       .then((books) => {
-        this.setState({ results: books });
+
+        const allBooks = [...books, this.state.books];
+        // console.log(books);
+        console.log(this.state);
+        // console.log(allBooks);
+
+        this.setState({results: books})
+
       })
   }
 
   render() {
-
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -55,7 +71,7 @@ export default class SearchBooks extends Component {
               onUpdateShelf={this.props.onUpdateShelf}
               author={book.authors}
               cover={book.imageLinks.thumbnail}
-              shelf='none'
+              shelf={book.shelf}
               />
             )}
           </ol>
