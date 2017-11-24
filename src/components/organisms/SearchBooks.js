@@ -14,25 +14,52 @@ export default class SearchBooks extends Component {
     this.setState({ books: props.books });
   }
 
-  searchTerm = (e) => {
+  componentWillMount() {
+    this.timer = null;
+  }
+
+  searchTerm = (search) => {
+
+    const myBooks = new Map();
+    this.state.books.forEach((book) => myBooks.set(book.id, book));
+    console.log(myBooks);
+
+    if (search) {
+      this.props.onSearch(this.state.search, 20)
+      .then((books) => {
+
+        const results = books.map((book) => {
+          console.log(myBooks.has(book.id), myBooks.get(book.id));
+          return myBooks.has(book.id) ? myBooks.get(book.id) : Object.assign(book, { shelf: 'none' });
+        })
+        console.log(results);
+        this.setState({ results })
+      })
+    }
+  }
+
+  myBooks = () => {
+    const myBooks = new Map();
+    this.state.books.forEach((book) => myBooks.set(book.id, book.shelf));
+    console.log(this);
+    return myBooks;
+  };
+
+
+  handleChange = (e) => {
     e.preventDefault();
 
-    console.log(this.state);
-    console.log(this.state.results);
+    clearTimeout(this.timer);
 
     this.setState({ search: e.target.value });
 
-    this.props.onSearch(e.target.value, 20)
-      .then((books) => {
+    this.timer = setTimeout(this.searchTerm(true), 1500);
+  }
 
-        const allBooks = [...books, ...this.state.books].reduce((prev, current) => {
-          console.log(prev, current);
-          return prev.shelf ? prev : current;
-        },);
-
-        this.setState({results: allBooks})
-
-      })
+  handleEnter = (e) => {
+    if (e.keyCode === 13) {
+      this.searchTerm();
+    }
   }
 
   render() {
@@ -45,14 +72,15 @@ export default class SearchBooks extends Component {
               type="text"
               placeholder="Search by title or author"
               value={this.state.search}
-              onChange={this.searchTerm}
+              onChange={this.handleChange}
+              onKeyDown={this.handleEnter}
               />
           </div>
         </div>
         <div className="search-books-results">
         {this.state.results.length > 0 &&
           <article>
-          <h2> Your results for {this.state.search} </h2>
+          <h2> {this.state.results.length} books found for "{this.state.search}" </h2>
           <ol className="books-grid">
           {this.state.results.map((book) =>
             <Book

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import SelectOption from './SelectOption';
 
 export default class Book extends Component {
 
