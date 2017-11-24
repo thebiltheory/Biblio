@@ -36,14 +36,6 @@ export default class SearchBooks extends Component {
     }
   }
 
-  myBooks = () => {
-    const myBooks = new Map();
-    this.state.books.forEach((book) => myBooks.set(book.id, book.shelf));
-    console.log(this);
-    return myBooks;
-  };
-
-
   handleChange = (e) => {
     e.preventDefault();
 
