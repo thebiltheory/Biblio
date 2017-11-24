@@ -51,7 +51,7 @@ export default class SearchBooks extends Component {
 
     this.setState({ search: e.target.value });
 
-    this.timer = setTimeout(this.searchTerm(true), 1500);
+    this.timer = setTimeout(this.searchTerm(true), 1000);
   }
 
   handleEnter = (e) => {
