@@ -22,17 +22,15 @@ export default class SearchBooks extends Component {
 
     const myBooks = new Map();
     this.state.books.forEach((book) => myBooks.set(book.id, book));
-    console.log(myBooks);
 
     if (search) {
       this.props.onSearch(this.state.search, 20)
       .then((books) => {
 
         const results = books.map((book) => {
-          console.log(myBooks.has(book.id), myBooks.get(book.id));
           return myBooks.has(book.id) ? myBooks.get(book.id) : Object.assign(book, { shelf: 'none' });
         })
-        console.log(results);
+
         this.setState({ results })
       })
     }
